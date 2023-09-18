@@ -1,5 +1,4 @@
 import { Router } from "express"
-import { connect } from "../connection.js"
 import {cargarTemp,consulta1,consulta2,consulta3,consulta4,consulta5,consulta6,consulta7,consulta8,consulta9,consulta10,consulta11} 
 from '../controllers/controller.js'
 
