@@ -4,19 +4,11 @@ import {readFileSync} from 'fs'
 import { Tablas } from './Tablas.js'
 
 export const cargarTemp=async(req,res)=>{
-    /*Crear tablas*/
-    let TablasG= Tablas.split(";")
-    for(let i=0;i<8;i++){
-        await connect.query(TablasG[i].trim())
-    }
-
-    
     /*Crear tablas temporales */
     let tablas= tablesTemp.split(";")
     for (let index = 0; index < 7; index++) {
         await connect.query(tablas[index].trim())
     }
-    console.log("Hice tablas temp")
 
 
     //Llenar tabla partidos
@@ -33,7 +25,6 @@ export const cargarTemp=async(req,res)=>{
         break
     }
     await connect.query('INSERT INTO partidos (id_partido,nombre,siglas,fundacion) SELECT * FROM Temppartidos;')
-    console.log("Sali de partidos")
 
     
     //Llenar tabla cargos 
@@ -48,12 +39,10 @@ export const cargarTemp=async(req,res)=>{
         break
     }
     await connect.query('INSERT INTO cargos (id_cargo,cargo) SELECT * FROM Tempcargos;')
-    console.log("Sali de cargos")
 
     //Llenar tabla de candidato
     texto=readFileSync("./Archivos/candidatos.csv",'utf-8')
     temp=texto.split("\n")
-    console.log(temp.length)
     for (let i = 1; i< temp.length; i++) {
         if(temp[i]!=""){
             let comas=temp[i].split(",")
@@ -66,7 +55,6 @@ export const cargarTemp=async(req,res)=>{
     }
 
     await connect.query('INSERT INTO candidatos (id_candidato,nombre,fecha,partido,cargo) SELECT * FROM Tempcandidatos;')
-    console.log("Sali de candidato")
 
 
     //Llenar tabla de ciudadanos 
@@ -83,7 +71,6 @@ export const cargarTemp=async(req,res)=>{
         break
     }
     await connect.query('INSERT INTO ciudadanos (dpi,nombre,apellido,direccion,telefono,edad,genero) SELECT * FROM Tempciudadanos;')
-    console.log("Sali de ciudadanos")
 
     //Llenar tabla departamentos
     texto=readFileSync("./Archivos/departamentos.csv",'utf-8')
@@ -98,7 +85,6 @@ export const cargarTemp=async(req,res)=>{
         break
     }
     await connect.query('INSERT INTO departamentos (id_departamento,nombre) SELECT * FROM Tempdepartamentos;')
-    console.log("Sali de departamentos")
 
     //Llenar tabla de mesas 
     texto=readFileSync("./Archivos/mesas.csv",'utf-8')
@@ -113,7 +99,6 @@ export const cargarTemp=async(req,res)=>{
         break
     }
     await connect.query('INSERT INTO mesa (id_mesa,id_dep) SELECT * FROM Tempmesa;')
-    console.log("Sali de mesa")
     
 
     //Llenar tabla votaciones
@@ -129,7 +114,7 @@ export const cargarTemp=async(req,res)=>{
         }
         break
     }
-    await connect.query('INSERT INTO voto (id_voto,fecha,id_dpi,mesa_id) SELECT DISTINCT id_voto,fecha,dpi,mesa_id FROM Tempvotaciones;')
+    await connect.query('INSERT INTO voto (id_voto,fecha,dpi,mesa_id) SELECT DISTINCT id_voto,fecha,dpi,mesa_id FROM Tempvotaciones;')
     await connect.query('INSERT INTO voto_detail (voto_id,candidato_id) SELECT id_voto,id_Cand FROM Tempvotaciones;')
     console.log("Sali de votos")
     res.send({mess: "Exito"})
@@ -225,4 +210,21 @@ export const consulta11=async(req,res)=>{
     inner join ciudadanos as c2 on c1.dpi=c2.dpi
     group by c2.genero;`)
     res.json(rec)
+}
+
+export const cargarModelo=async(req,res)=>{
+    /*Crear tablas*/
+    let TablasG= Tablas.split(";")
+    for(let i=0;i<8;i++){
+        await connect.query(TablasG[i].trim())
+    }
+
+    res.json({msg: "Modelo creado con éxito"})
+}
+
+export const deleteModel=async(req,res)=>{
+    await connect.query(`drop database Proyecto;`)
+    await connect.query(`create database Proyecto;`)
+
+    res.json({msg: "Modelo eliminado con exito"})
 }

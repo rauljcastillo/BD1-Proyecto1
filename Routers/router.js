@@ -1,5 +1,6 @@
 import { Router } from "express"
-import {cargarTemp,consulta1,consulta2,consulta3,consulta4,consulta5,consulta6,consulta7,consulta8,consulta9,consulta10,consulta11} 
+import {cargarTemp,consulta1,consulta2,consulta3,consulta4,consulta5,consulta6,consulta7
+,consulta8,consulta9,consulta10,consulta11,cargarModelo, deleteModel} 
 from '../controllers/controller.js'
 
 const router=Router()
@@ -27,5 +28,9 @@ router.get('/consulta10',consulta10)
 router.get('/consulta11',consulta11)
 
 router.get('/cargartabtemp',cargarTemp)
+
+router.get('/crearmodelo',cargarModelo)
+
+router.get('/eliminarmodelo',deleteModel)
 
 export default router
