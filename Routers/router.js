@@ -27,6 +27,6 @@ router.get('/consulta10',consulta10)
 
 router.get('/consulta11',consulta11)
 
-router.get('/cargatabtemp',cargarTemp)
+router.get('/cargartabtemp',cargarTemp)
 
 export default router
